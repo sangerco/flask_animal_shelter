@@ -6,12 +6,13 @@ from forms import AddPetForm
 app = Flask(__name__)
 app.app_context().push()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///animal_shelter_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "doggo"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
+connect_db(app)
 
 @app.route('/')
 def home_page():
@@ -40,12 +41,12 @@ def add_pet_page():
     else:
         return render_template('add.html', form=form)
 
-@app.route('/pets/<int:id>')
-def show_pet_page(id):
+@app.route('/pets/<int:pet_id>')
+def show_pet_page(pet_id):
     """ render view of each pet in shelter
         add edit and return buttons"""
 
-    pet = Pet.query.get_or_404(id)
+    pet = Pet.query.get_or_404(pet_id)
     return render_template('/view-pet.html', pet=pet)
 
 @app.route('/pets/<int:id>/edit', methods=['GET', 'POST'])
@@ -63,6 +64,7 @@ def edit_pet_page(id):
         pet.notes = form.notes.data
         pet.available = form.available.data
         db.session.commit()
+        flash(f"{pet.name} edited.")
         return redirect('/view-pet.html', pet=pet)
     else:
         return render_template('edit-pet.html', form=form)

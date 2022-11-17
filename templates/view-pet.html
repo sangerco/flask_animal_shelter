@@ -3,6 +3,9 @@
 {% block title %}{{pet.name}}{% endblock %}
 
 <div class="container">
+    {% for msg in get_flashed_messages() %}
+    <div>{{ msg }}</div>
+    {% endfor %}
     <div class="row align-items-start">
         <img src="{{pet.photo_url}}" alt="Picture of {{pet.name}}" height="300">
     </div>

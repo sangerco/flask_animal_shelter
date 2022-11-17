@@ -6,6 +6,9 @@
 
 <div class="container">
     <h1 class="display-1">Pets for Adoption</h1>
+    {% for msg in get_flashed_messages() %}
+    <div>{{ msg }}</div>
+    {% endfor %}
     <table class="table table-striped">
         <thead>
             <th>Pet Name</th>
@@ -26,6 +29,7 @@
             </tr>
             {% endfor %}
         </tbody>
+        <a href="/add" class="btn btn-success btn-large">Add Pet</a>
     </table>
 </div>
 

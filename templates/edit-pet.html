@@ -8,6 +8,9 @@
     <h1 class="display-2 text-center">Edit {{pet.name}}</h1>
     <div class="row justify-content-center">
         <div class="col-md-8">
+            {% for msg in get_flashed_messages() %}
+            <div>{{ msg }}</div>
+            {% endfor %}
             <form method="POST">
                 {{ form.hidden_tag() }}
                 {% for field in form
