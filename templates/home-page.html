@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Pets for Adoption{% endblock %}
+
+{% block content%}
+
+<div class="container">
+    <h1 class="display-1">Pets for Adoption</h1>
+    <table class="table table-striped">
+        <thead>
+            <th>Pet Name</th>
+            <th></th>
+            <th>Availablity</th>
+        </thead>
+        <tbody>
+            {% for pet in pets %}
+            <tr>
+                <td>{{pet.name}} <a class="btn btn-sm btn-outline-success py-0" href="/pets/{{pet.id}}/">More info</a>
+                </td>
+                <td><img src="{{pet.photo_url}}" alt="{{pet.name}}" height="100px"></td>
+                {% if pet.available %}
+                <td><strong>Available</strong></td>
+                {% else %}
+                <td></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
