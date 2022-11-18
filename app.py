@@ -12,7 +12,9 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "doggo"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
+
 connect_db(app)
+db.create_all()
 
 @app.route('/')
 def home_page():
@@ -36,7 +38,7 @@ def add_pet_page():
         pet = Pet(name=name, species=species, photo_url=photo_url, age=age, notes=notes, available=available)
         db.session.add(pet)
         db.session.commit()
-        flash(f"Added {name} the {species} to the database.")
+        flash(f"Added {name} the {species} to the database!")
         return redirect("/add")
     else:
         return render_template('add.html', form=form)
@@ -45,15 +47,14 @@ def add_pet_page():
 def show_pet_page(pet_id):
     """ render view of each pet in shelter
         add edit and return buttons"""
-
     pet = Pet.query.get_or_404(pet_id)
     return render_template('/view-pet.html', pet=pet)
 
-@app.route('/pets/<int:id>/edit', methods=['GET', 'POST'])
-def edit_pet_page(id):
+@app.route('/pets/<int:pet_id>/edit', methods=['GET', 'POST'])
+def edit_pet_page(pet_id):
     """ show edit pet page, handle incoming data """
 
-    pet = Pet.query.get_or_404(id)
+    pet = Pet.query.get_or_404(pet_id)
     form = AddPetForm(obj=pet)
 
     if form.validate_on_submit():
@@ -65,6 +66,16 @@ def edit_pet_page(id):
         pet.available = form.available.data
         db.session.commit()
         flash(f"{pet.name} edited.")
-        return redirect('/view-pet.html', pet=pet)
+        return redirect(f'/pets/{pet_id}')
     else:
-        return render_template('edit-pet.html', form=form)
+        return render_template('edit-pet.html', pet=pet, form=form)
+
+@app.route('/pets/<int:pet_id>/delete')
+def delete_pet_page(pet_id):
+    """ delete pet from database """
+
+    pet = Pet.query.get_or_404(pet_id)
+    db.session.delete(pet)
+    db.session.commit()
+
+    return redirect('/')

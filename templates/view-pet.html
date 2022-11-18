@@ -2,12 +2,16 @@
 
 {% block title %}{{pet.name}}{% endblock %}
 
+{% block content%}
+
 <div class="container">
     {% for msg in get_flashed_messages() %}
     <div>{{ msg }}</div>
     {% endfor %}
     <div class="row align-items-start">
-        <img src="{{pet.photo_url}}" alt="Picture of {{pet.name}}" height="300">
+        <div class="col">
+            <img src="{{pet.photo_url}}" alt="Picture of {{pet.name}}" width="300">
+        </div>
     </div>
     <div class="col">
         <h1 class="display-2">{{pet.name}}</h1>
@@ -21,7 +25,9 @@
     </div>
     <div class="col">
         <a href="/" class="btn btn-info" role="button">Go Back</a>
-        <a href="/pets/{{pet.id}}/edit" class="btn btn-sucess" role="button">Edit</a>
+        <a href="/pets/{{pet.id}}/edit" class="btn btn-success" role="button">Edit</a>
     </div>
 
 </div>
+
+{% endblock %}

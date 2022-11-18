@@ -9,7 +9,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             {% for msg in get_flashed_messages() %}
-            <div>{{ msg }}</div>
+            <div class="bg-success text-white">{{ msg }}</div>
             {% endfor %}
             <form method="POST">
                 {{ form.hidden_tag() }}
